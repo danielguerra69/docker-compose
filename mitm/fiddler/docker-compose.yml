@@ -1,0 +1,24 @@
+#fiddler
+fiddler:
+  image: danielguerra/alpine-fiddler
+  hostname: fiddler
+  volumes:
+   - "./fiddler:/root"
+  ports:
+    - "8888:8888"
+    - "2222:22"
+  cap_add:
+    - NET_ADMIN
+
+# firefox
+firefox:
+  image: danielguerra/alpine-firefox
+  hostname: firefox
+  links:
+   - "fiddler:proxy"
+  environment:
+   - all_proxy=http://proxy:8888
+  volumes:
+   - "./fiddler:/root"
+  ports:
+   - "4848:22"

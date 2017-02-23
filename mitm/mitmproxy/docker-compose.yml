@@ -1,0 +1,76 @@
+
+version: '2'
+
+services:
+ #mitmproxy
+ mitmproxy:
+  image: danielguerra/alpine-mitmproxy
+  hostname: mitmproxy
+  command: "mitmdump"
+  environment:
+   - MITMPROXY_SSLKEYLOGFILE=/root/.mitmproxy/sslkeylog
+  networks:
+   - service
+  volumes:
+   - mitmproxy-flows:/root/flows
+   - mitmproxy-certs:/root/.mitmproxy/
+
+# chromium
+ chromium:
+  image: danielguerra/alpine-chromium
+  hostname: chromium
+  depends_on:
+   - mitmproxy
+  links:
+   - "mitmproxy:proxy"
+  environment:
+   - all_proxy=proxy:8080
+  networks:
+   - service
+  volumes:
+   - mitmproxy-certs:/root/mitmproxy-certs/
+   - ssh-keys:/root/.ssh/
+  ports:
+   - "1111:22"
+
+# firefox
+ firefox:
+  image: danielguerra/alpine-firefox
+  hostname: firefox
+  depends_on:
+   - mitmproxy
+  links:
+   - "mitmproxy:proxy"
+  environment:
+   - all_proxy=proxy:8080
+  networks:
+   - service
+  volumes:
+   - mitmproxy-certs:/root/mitmproxy-certs/
+   - ssh-keys:/root/.ssh/
+  ports:
+   - "1112:22"
+
+# wireshark
+ wireshark:
+  image: danielguerra/alpine-wireshark
+  depends_on:
+   - mitmproxy
+  networks:
+   - service
+  volumes:
+   - mitmproxy-flows:/root/mitmproxy-flows/
+   - mitmproxy-certs:/root/mitmproxy-certs/
+   - ssh-keys:/root/.ssh/
+  ports:
+   - "1113:22"
+
+networks:
+ service:
+  external:
+   name: "int_net"
+
+volumes:
+ mitmproxy-flows:
+ mitmproxy-certs:
+ ssh-keys:

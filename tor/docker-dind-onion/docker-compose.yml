@@ -1,0 +1,20 @@
+
+version: '2'
+
+services:
+ ssh:
+  image: danielguerra/docker-dind-sshd
+  hostname: ssh
+  privileged: true
+  volumes:
+   - ./authorized_keys:/root/.ssh/authorized_keys
+
+ tor:
+  image: goldy/tor-hidden-service
+  hostname: tor
+  links:
+   - ssh
+  depends_on:
+   - ssh
+  environment:
+   - SSH_PORTS=$EXT_PORT:22

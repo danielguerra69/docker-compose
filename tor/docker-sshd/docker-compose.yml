@@ -1,0 +1,26 @@
+
+version: '2'
+
+
+services:
+ ssh:
+  image: danielguerra/docker-sshd
+  hostname: ssh
+  environment:
+   - DOCKER_IP="172.17.0.1"
+   - DOCKER_PORT="2376"
+  volumes:
+   - ssh-keys:/root/.ssh/
+
+ tor:
+  image: goldy/tor-hidden-service
+  hostname: tor
+  links:
+   - ssh
+  depends_on:
+   - ssh
+  environment:
+   - SSH_PORTS=$EXT_PORT:22
+
+volumes:
+  ssh-keys:
