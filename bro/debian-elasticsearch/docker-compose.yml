@@ -31,14 +31,14 @@ nginx:
 
 # ELASTICSEARCH
 elasticsearch-master:
- image: danielguerra/alpine-elasticsearch
+ image: danielguerra/alpine-elasticsearch:2.4.1
  command: -Des.network.bind_host=elasticsearch-master --cluster.name=bro --node.name=elasticsearch-master --discovery.zen.ping.multicast.enabled=false --network.host=elasticsearch-master
  hostname: elasticsearch-master
  volumes_from:
    - "elastic-data-master"
 
 elasticsearch-node01:
- image: danielguerra/alpine-elasticsearch
+ image: danielguerra/alpine-elasticsearch:2.4.1
  command: -Des.network.bind_host=elasticsearch-node01 --cluster.name=bro --node.name=elasticsearch-node01 --discovery.zen.ping.unicast.hosts=master:9300  --network.host=elasticsearch-node01
  hostname: elasticsearch-node01
  links:
@@ -47,7 +47,7 @@ elasticsearch-node01:
    - "elastic-data-node01"
 
 elasticsearch-node02:
- image: danielguerra/alpine-elasticsearch
+ image: danielguerra/alpine-elasticsearch:2.4.1
  command: -Des.network.bind_host=elasticsearch-node02 --cluster.name=bro --node.name=elasticsearch-node02 --discovery.zen.ping.unicast.hosts=master:9300  --network.host=elasticsearch-node02
  hostname: elasticsearch-node02
  links:

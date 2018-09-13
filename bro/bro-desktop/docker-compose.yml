@@ -80,24 +80,24 @@ services:
   links:
    - "kibana:kibana"
    - "bro:bro"
-   - "grafana:grafana"
+  # - "grafana:grafana"
   ports:
    - "7777:22"
 
 #grafana
- grafana:
-  image: grafana/grafana
-  hostname: grafanana
-  environment:
-   - GF_SERVER_ROOT_URL "http://127.0.0.1:3000"
-   - GF_SECURITY_ADMIN_PASSWORD "mypass"
-  links:
-   - elasticsearch-master
-   - elasticsearch-node01
-   - elasticsearch-node02
-   - kibana
-   - bro
-   - nginx
+# grafana:
+#  image: grafana/grafana
+#  hostname: grafanana
+#  environment:
+#   - GF_SERVER_ROOT_URL "http://127.0.0.1:3000"
+#   - GF_SECURITY_ADMIN_PASSWORD "mypass"
+#  links:
+#   - elasticsearch-master
+#   - elasticsearch-node01
+#   - elasticsearch-node02
+#   - kibana
+#   - bro
+#   - nginx
 
 volumes:
  ssh-keys:

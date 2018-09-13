@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+ maltego:
+  image: danielguerra/kali-maltego
+  hostname: maltego
+
+ sshd:
+  image: danielguerra/alpine-sshd
+  hostname: sshd
+  links:
+   - maltego
+
+ tor:
+  image: goldy/tor-hidden-service
+  hostname: tor
+  links:
+   - sshd
+  environment:
+   - SSHD_PORTS=80:80

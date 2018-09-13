@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+ http:
+  build: ./server
+  hostname: http
+
+ tor:
+  image: goldy/tor-hidden-service
+  hostname: tor
+  links:
+   - http
+  depends_on:
+   - http
+  environment:
+   - HTTP_PORTS=80:80

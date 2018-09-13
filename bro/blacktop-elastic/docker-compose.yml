@@ -1,0 +1,32 @@
+# Blacktop bro elasticsearch compose
+version: '2.0'
+
+services:
+  # ELASTICSEARCH
+  es:
+    image: blacktop/elasticsearch
+    command: -Ecluster.name=blacktop-bro-elasticsearch
+    hostname: es
+    volumes:
+      - elastic-data:/usr/share/elasticsearch/data
+
+  # KIBANA
+  kibana:
+    image: blacktop/kibana
+    hostname: kibana
+    links:
+      - es:elasticsearch
+    ports:
+      - 5601:5601
+
+  bro:
+    image: blacktop/bro:elastic
+    hostname: bro
+    links:
+      - es:elasticsearch
+    volumes:
+      - pcap-data:/pcap
+
+volumes:
+  elastic-data:
+  pcap-data:
